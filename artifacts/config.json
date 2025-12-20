@@ -1,0 +1,25 @@
+{
+  "sample_rate": 16000,
+  "duration": 2.0,
+  "n_mfcc": 40,
+  "n_estimators": 200,
+  "label_map": {
+    "0": "Female",
+    "1": "Male"
+  },
+  "metrics": {
+    "accuracy": 0.9996904024767802,
+    "f1_score": 0.9996904322643622,
+    "confusion_matrix": [
+      [
+        2307,
+        0
+      ],
+      [
+        2,
+        4151
+      ]
+    ],
+    "classification_report": "              precision    recall  f1-score   support\n\n           0       1.00      1.00      1.00      2307\n           1       1.00      1.00      1.00      4153\n\n    accuracy                           1.00      6460\n   macro avg       1.00      1.00      1.00      6460\nweighted avg       1.00      1.00      1.00      6460\n"
+  }
+}
