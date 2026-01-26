@@ -1,0 +1,108 @@
+version: '3.8'
+
+services:
+  # Main training service
+  gender-detection-train:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gender-detection-train
+    image: gender-detection:latest
+    volumes:
+      # Mount data directory
+      - ./data:/app/data:ro
+      # Mount artifacts for persistence
+      - ./artifacts:/app/artifacts
+      # Mount feedback data
+      - ./feedback_data:/app/feedback_data
+      # Mount logs
+      - ./logs:/app/logs
+    environment:
+      - PYTHONPATH=/app
+      - LOG_LEVEL=INFO
+    command: python src/main.py
+    restart: on-failure
+    networks:
+      - ml-network
+
+  # Testing service
+  gender-detection-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gender-detection-test
+    image: gender-detection:latest
+    volumes:
+      - ./src:/app/src
+      - ./tests:/app/tests
+      - ./htmlcov:/app/htmlcov
+      - ./artifacts:/app/artifacts
+    environment:
+      - PYTHONPATH=/app
+    command: pytest tests/ -v --cov=src --cov-report=html --cov-report=term
+    networks:
+      - ml-network
+    profiles:
+      - test
+
+  # # Jupyter notebook service for experimentation
+  # gender-detection-notebook:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.notebook
+  #   container_name: gender-detection-notebook
+  #   image: gender-detection-notebook:latest
+  #   ports:
+  #     - "8888:8888"
+  #   volumes:
+  #     - ./:/app
+  #     - ./notebooks:/app/notebooks
+  #   environment:
+  #     - JUPYTER_ENABLE_LAB=yes
+  #     - PYTHONPATH=/app
+  #   command: >
+  #     jupyter lab
+  #     --ip=0.0.0.0
+  #     --port=8888
+  #     --no-browser
+  #     --allow-root
+  #     --NotebookApp.token=''
+  #     --NotebookApp.password=''
+  #   networks:
+  #     - ml-network
+  #   profiles:
+  #     - dev
+
+  # # API service (for future deployment)
+  # gender-detection-api:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.api
+  #   container_name: gender-detection-api
+  #   image: gender-detection-api:latest
+  #   ports:
+  #     - "8000:8000"
+  #   volumes:
+  #     - ./artifacts:/app/artifacts:ro
+  #     - ./logs:/app/logs
+  #   environment:
+  #     - PYTHONPATH=/app
+  #     - MODEL_PATH=/app/artifacts/gender_rf.pkl
+  #     - SCALER_PATH=/app/artifacts/scaler.pkl
+  #   command: uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+  #   depends_on:
+  #     - gender-detection-train
+  #   networks:
+  #     - ml-network
+  #   profiles:
+  #     - api
+  #   restart: unless-stopped
+
+networks:
+  ml-network:
+    driver: bridge
+
+volumes:
+  artifacts:
+  feedback_data:
+  logs:
