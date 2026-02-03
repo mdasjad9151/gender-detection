@@ -3,12 +3,12 @@ import sys
 from pathlib import Path
 from typing import Optional, Dict, List
 import numpy as np
-from config import ModelConfig
-from feature_extractor import AudioFeatureExtractor
-from dataset_loader import DatasetLoader
-from model_trainer import ModelTrainer
-from model_persistence import ModelPersistence
-from feedback_manager import FeedbackManager
+from src.config import ModelConfig
+from src.feature_extractor import AudioFeatureExtractor
+from src. dataset_loader import DatasetLoader
+from src.model_trainer import ModelTrainer
+from src.model_persistence import ModelPersistence
+from src.feedback_manager import FeedbackManager
 
 
 sys.path.insert(0, str(Path(__file__).parent))

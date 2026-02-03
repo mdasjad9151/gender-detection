@@ -25,7 +25,7 @@ class ModelConfig:
     model_path: str = "artifacts/gender_rf.pkl"
     scaler_path: str = "artifacts/scaler.pkl"
     config_path: str = "artifacts/config.json"
-    feedback_dir: str = "feedback_data"
+    feedback_dir: str = "feedback"
     log_dir: str = "logs"
     
     # Labels

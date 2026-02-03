@@ -6,3 +6,11 @@ models/
 htmlcov/
 *.pyc
 *.pyo
+/frontend/node_modules/
+/frontend/build/
+.DS_Store
+.vscode/
+.idea/
+.env
+/feedback/
+*.sqlite3
